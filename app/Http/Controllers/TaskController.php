@@ -20,8 +20,6 @@ class TaskController extends Controller
     ];
     }
 
-
-
     public function index()
     {
         $tasks = auth()->user()->tasks;
@@ -44,18 +42,23 @@ class TaskController extends Controller
     public function store()
     {
         request()->validate([
-            'task_name' => 'required|max:255'
+            'task_name' => 'required|max:255',
+            'description' => 'nullable|string',
+            'deadline' => 'nullable|date',
         ]);
 
-        //request from blade
-        $name =request('task_name');
-        $done =request('done')==='on';
-        $priority =request('priority')===null ? 0:request('priority');
+        $name = request('task_name');
+        $done = request('done') === 'on';
+        $priority = request('priority') === null ? 0 : request('priority');
+        $description = request('description');
+        $deadline = request('deadline');
 
-        $task=Task::create([
-            'name'=> $name,
-            'priority'=>$priority,
-            'done' =>$done,
+        $task = Task::create([
+            'name' => $name,
+            'priority' => $priority,
+            'done' => $done,
+            'description' => $description,
+            'deadline' => $deadline,
             'user_id' => auth()->user()->id,
         ]);
 
@@ -70,18 +73,25 @@ class TaskController extends Controller
     public function update(Task $task)
     {
         request()->validate([
-            'task_name' => 'required|max:255'
+            'task_name' => 'required|max:255',
+            'description' => 'nullable|string',
+            'deadline' => 'nullable|date',
         ]);
 
-        $name =request('task_name');
-        $done =request('done')==='on';
-        $priority =request('priority')===null ? 0:request('priority');
+        $name = request('task_name');
+        $done = request('done') === 'on';
+        $priority = request('priority') === null ? 0 : request('priority');
+        $description = request('description');
+        $deadline = request('deadline');
 
-        $task->Update([
-            'name'=> $name,
-            'priority'=>$priority,
-            'done' =>$done
+        $task->update([
+            'name' => $name,
+            'priority' => $priority,
+            'done' => $done,
+            'description' => $description,
+            'deadline' => $deadline,
         ]);
+
         return redirect(route('task', $task->id));
     }
 

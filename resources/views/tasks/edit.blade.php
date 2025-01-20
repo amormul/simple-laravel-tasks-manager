@@ -25,6 +25,16 @@
                             </div>
 
                             <div class="mb-4">
+                                <label for="description" class="form-label text-light">Description:</label>
+                                <textarea class="form-control" id="description" name="description" style="background: rgba(255, 255, 255, 0.1); color: #fff; border: 2px solid rgba(255, 255, 255, 0.2);">{{ old('description', $task->description ?? '') }}</textarea>
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="deadline" class="form-label text-light">Deadline:</label>
+                                <input type="date" class="form-control" id="deadline" name="deadline" value="{{ old('deadline', $task->deadline ?? '') }}" style="background: rgba(255, 255, 255, 0.1); color: #fff; border: 2px solid rgba(255, 255, 255, 0.2);">
+                            </div>
+
+                            <div class="mb-4">
                                 <label for="priority" class="form-label text-light">Priority:</label>
                                 <input type="text" class="form-control" name="priority" value="{{ $task->priority }}" style="background: rgba(255, 255, 255, 0.1); color: #fff; border: 2px solid rgba(255, 255, 255, 0.2);">
                             </div>

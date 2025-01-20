@@ -11,6 +11,8 @@
                         <p class="card-text text-light">ID: {{ $task->id }}</p>
                         <p class="card-text text-light">Priority: {{ $task->priority }}</p>
                         <p class="card-text text-light">Completed: {{ $task->done ? 'True' : 'False' }}</p>
+                        <p class="card-text text-light">Description: {{ $task->description }}</p>
+                        <p class="card-text text-light">Deadline: {{ $task->deadline }}</p>
                     </div>
 
                     <div class="modal-footer">
