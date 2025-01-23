@@ -6,32 +6,44 @@
             <div class="col-md-12">
                 <div class="card mb-4" style="background: rgba(40, 40, 60, 0.95); border-radius: 15px;">
                     <div class="card-header text-white text-center fs-4" style="background: linear-gradient(45deg, #6a11cb, #2575fc); font-weight: bold;">
-                        Tasks
+                        Task List
                     </div>
                     <div class="card-body text-light">
-                        <a href="{{ route('projects.index') }}" class="btn btn-success mb-3">Back to Projects</a>
-                        @if($tasks->isNotEmpty())
-                            <div class="row">
-                                @foreach($tasks as $task)
-                                    <div class="col-md-4 mb-4">
-                                        <div class="card" style="background: rgba(255, 255, 255, 0.1); color: #fff; border: 2px solid rgba(255, 255, 255, 0.2);">
-                                            <div class="card-body">
-                                                <h5 class="card-title">{{ $task->name }}</h5>
-
-                                                <a href="{{ route('projects.tasks.edit', [$task->project_id, $task]) }}" class="btn btn-primary">Edit</a>
-
-                                                <form action="{{ route('projects.tasks.destroy', [$task->project_id, $task]) }}" method="POST" class="d-inline">
+                        @if($tasks->isEmpty())
+                            <p class="text-center">No tasks available.</p>
+                        @else
+                            <table class="table table-dark table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>Status</th>
+                                    <th>Due Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach ($tasks as $task)
+                                    <tr>
+                                        <td>{{ $task->name }}</td>
+                                        <td>{{ $task->description }}</td>
+                                        <td>{{ $task->status }}</td>
+                                        <td>{{ $task->due_date }}</td>
+                                        <td>
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <a href="{{ route('projects.tasks.edit', [$project, $task]) }}" class="btn btn-warning">Edit</a>
+                                                <a href="{{ route('projects.tasks.details', [$project, $task]) }}" class="btn btn-info">View Details</a>
+                                                <form action="{{ route('projects.tasks.destroy', [$project, $task]) }}" method="POST" class="d-inline">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger">Delete</button>
                                                 </form>
                                             </div>
-                                        </div>
-                                    </div>
+                                        </td>
+                                    </tr>
                                 @endforeach
-                            </div>
-                        @else
-                            <p>No tasks available.</p>
+                                </tbody>
+                            </table>
                         @endif
                     </div>
                 </div>

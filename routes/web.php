@@ -25,7 +25,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/', [TaskController::class, 'store'])->name('projects.tasks.store');
         Route::get('/{task}', [TaskController::class, 'show'])->name('projects.tasks.show');
         Route::get('/{task}/edit', [TaskController::class, 'edit'])->name('projects.tasks.edit');
-        Route::put('/{task}', [TaskController::class, 'update'])->name('projects.tasks.update');
+        Route::put('/{task}', [TaskController::class, 'update'])->name('projects.tasks.update'); // Ensure this line is present
         Route::delete('/{task}', [TaskController::class, 'destroy'])->name('projects.tasks.destroy');
         Route::get('/{task}/details', [TaskController::class, 'details'])->name('projects.tasks.details');
     });
