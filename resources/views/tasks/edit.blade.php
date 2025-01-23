@@ -10,14 +10,14 @@
                     </div>
 
                     <div class="card-body p-5 position-relative">
-                        <form action="{{ route('update', $task->id) }}" method="POST">
+                        <form action="{{ route('projects.tasks.update', [$project, $task]) }}" method="POST">
                             @csrf
                             @method('PUT')
 
                             <div class="mb-4">
                                 <label for="name" class="form-label text-light">Task Name:</label>
-                                <input type="text" class="form-control @error('task_name') is-invalid @enderror" name="task_name" id="name" value="{{ $task->name }}" style="background: rgba(255, 255, 255, 0.1); color: #fff; border: 2px solid rgba(255, 255, 255, 0.2);">
-                                @error('task_name')
+                                <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" id="name" value="{{ $task->name }}" style="background: rgba(255, 255, 255, 0.1); color: #fff; border: 2px solid rgba(255, 255, 255, 0.2);">
+                                @error('name')
                                 <div class="invalid-feedback">
                                     <strong>{{ $message }}</strong>
                                 </div>

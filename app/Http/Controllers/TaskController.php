@@ -2,102 +2,80 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Project;
 use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
 
 class TaskController extends Controller
 {
-    public function __construct()
+    public function index(Project $project)
     {
-        $rules = [
-        'name' => 'nullable|string',
-        'email' => 'nullable|email',
-        'phone' => 'nullable|numeric',
-        'mobile' => 'nullable|numeric',
-        'site_type_id' => 'nullable|integer'
-    ];
+        $tasks = $project->tasks()->where('user_id', Auth::id())->get();
+        return view('tasks.index', compact('tasks', 'project'));
     }
 
-    public function index()
+    public function create(Project $project)
     {
-        $tasks = auth()->user()->tasks;
-        return view('tasks.index', compact('tasks'));
+        return view('tasks.create', compact('project'));
     }
 
-    public function show(Task $task)
+    public function store(Request $request, Project $project)
     {
-        if (Auth::id() !== (int)$task->user_id) {
-            return redirect(route('tasks'));
-        }
-        return view('tasks.show', compact('task'));
-    }
-
-    public function create()
-    {
-        return view('tasks.create');
-    }
-
-    public function store()
-    {
-        request()->validate([
-            'task_name' => 'required|max:255',
+        $request->validate([
+            'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'deadline' => 'nullable|date',
+            'priority' => 'required|integer',
         ]);
 
-        $name = request('task_name');
-        $done = request('done') === 'on';
-        $priority = request('priority') === null ? 0 : request('priority');
-        $description = request('description');
-        $deadline = request('deadline');
-
-        $task = Task::create([
-            'name' => $name,
-            'priority' => $priority,
-            'done' => $done,
-            'description' => $description,
-            'deadline' => $deadline,
-            'user_id' => auth()->user()->id,
+        Task::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'deadline' => $request->deadline,
+            'priority' => $request->priority,
+            'user_id' => auth()->id(),
+            'project_id' => $project->id,
         ]);
 
-        return redirect(route('task', $task->id));
+        return redirect()->route('projects.show', $project)->with('success', 'Task created successfully.');
     }
 
-    public function edit(Task $task)
+    public function show(Project $project, Task $task)
     {
-        return view('tasks.edit', compact('task'));
+        return view('tasks.show', compact('project', 'task'));
     }
 
-    public function update(Task $task)
+    public function edit(Project $project, Task $task)
     {
-        request()->validate([
-            'task_name' => 'required|max:255',
+        return view('tasks.edit', compact('project', 'task'));
+    }
+
+    public function update(Request $request, Project $project, Task $task)
+    {
+        $request->validate([
+            'name' => 'required|max:255',
+            'priority' => 'nullable|integer',
+            'done' => 'nullable|boolean',
             'description' => 'nullable|string',
             'deadline' => 'nullable|date',
+            'user_id' => 'nullable|integer',
         ]);
 
-        $name = request('task_name');
-        $done = request('done') === 'on';
-        $priority = request('priority') === null ? 0 : request('priority');
-        $description = request('description');
-        $deadline = request('deadline');
-
-        $task->update([
-            'name' => $name,
-            'priority' => $priority,
-            'done' => $done,
-            'description' => $description,
-            'deadline' => $deadline,
-        ]);
-
-        return redirect(route('task', $task->id));
+        $task->update($request->all());
+        return redirect()->route('projects.show', $project)->with('success', 'Task updated successfully.');
     }
 
-    public function delete(Task $task)
+    public function details(Project $project, Task $task)
     {
+        return response()->json($task);
+    }
+
+    public function destroy($projectId, $taskId)
+    {
+        $task = Task::findOrFail($taskId);
         $task->delete();
-        return redirect(route('tasks'));
+
+        return redirect()->route('projects.show', $projectId)->with('success', 'Task deleted successfully.');
     }
 }

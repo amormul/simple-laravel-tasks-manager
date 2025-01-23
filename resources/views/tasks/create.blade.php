@@ -6,16 +6,27 @@
             <div class="col-md-6">
                 <div class="card border-0" style="overflow: hidden; background: rgba(40, 40, 60, 0.95); border-radius: 15px;">
                     <div class="card-header text-white text-center fs-4" style="background: linear-gradient(45deg, #6a11cb, #2575fc); font-weight: bold;">
-                        Create New Task
+                        Create Task
                     </div>
 
                     <div class="card-body p-5 position-relative">
-                        <form action="{{ route('store') }}" method="POST">
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
+                        <form action="{{ route('projects.tasks.store', $project) }}" method="POST">
                             @csrf
+
                             <div class="mb-4">
                                 <label for="name" class="form-label text-light">Task Name:</label>
-                                <input type="text" class="form-control @error('task_name') is-invalid @enderror" name="task_name" id="name" style="background: rgba(255, 255, 255, 0.1); color: #fff; border: 2px solid rgba(255, 255, 255, 0.2);">
-                                @error('task_name')
+                                <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" id="name" value="{{ old('name') }}" style="background: rgba(255, 255, 255, 0.1); color: #fff; border: 2px solid rgba(255, 255, 255, 0.2);" required>
+                                @error('name')
                                 <div class="invalid-feedback">
                                     <strong>{{ $message }}</strong>
                                 </div>
@@ -24,26 +35,41 @@
 
                             <div class="mb-4">
                                 <label for="description" class="form-label text-light">Description:</label>
-                                <textarea class="form-control" id="description" name="description" style="background: rgba(255, 255, 255, 0.1); color: #fff; border: 2px solid rgba(255, 255, 255, 0.2);">{{ old('description', $task->description ?? '') }}</textarea>
+                                <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description" style="background: rgba(255, 255, 255, 0.1); color: #fff; border: 2px solid rgba(255, 255, 255, 0.2);">{{ old('description') }}</textarea>
+                                @error('description')
+                                <div class="invalid-feedback">
+                                    <strong>{{ $message }}</strong>
+                                </div>
+                                @enderror
                             </div>
 
                             <div class="mb-4">
                                 <label for="deadline" class="form-label text-light">Deadline:</label>
-                                <input type="date" class="form-control" id="deadline" name="deadline" value="{{ old('deadline', $task->deadline ?? '') }}" style="background: rgba(255, 255, 255, 0.1); color: #fff; border: 2px solid rgba(255, 255, 255, 0.2);">
+                                <input type="date" class="form-control @error('deadline') is-invalid @enderror" id="deadline" name="deadline" value="{{ old('deadline') }}" style="background: rgba(255, 255, 255, 0.1); color: #fff; border: 2px solid rgba(255, 255, 255, 0.2);">
+                                @error('deadline')
+                                <div class="invalid-feedback">
+                                    <strong>{{ $message }}</strong>
+                                </div>
+                                @enderror
                             </div>
 
                             <div class="mb-4">
                                 <label for="priority" class="form-label text-light">Priority:</label>
-                                <input type="text" class="form-control" name="priority" style="background: rgba(255, 255, 255, 0.1); color: #fff; border: 2px solid rgba(255, 255, 255, 0.2);">
+                                <input type="number" class="form-control @error('priority') is-invalid @enderror" name="priority" id="priority" value="{{ old('priority') }}" style="background: rgba(255, 255, 255, 0.1); color: #fff; border: 2px solid rgba(255, 255, 255, 0.2);" required>
+                                @error('priority')
+                                <div class="invalid-feedback">
+                                    <strong>{{ $message }}</strong>
+                                </div>
+                                @enderror
                             </div>
 
                             <div class="mb-4 form-check">
-                                <input type="checkbox" class="form-check-input" name="done" id="done" style="border-color: rgba(255, 255, 255, 0.4);">
+                                <input type="checkbox" name="done" class="form-check-input" id="done" style="border-color: rgba(255, 255, 255, 0.4);">
                                 <label class="form-check-label text-light" for="done">Completed</label>
                             </div>
 
                             <button type="submit" class="btn w-100 mb-3" style="background: linear-gradient(to right, #8e44ad, #3498db); color: #fff; font-weight: bold; box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); transition: transform 0.3s, box-shadow 0.3s;">
-                                Submit
+                                Create Task
                             </button>
                         </form>
                     </div>
