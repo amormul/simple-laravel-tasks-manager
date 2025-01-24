@@ -9,10 +9,12 @@
                         Task Details
                     </div>
                     <div class="card-body text-light">
-                        <p><strong>Name:</strong> {{ $task->name }}</p>
-                        <p><strong>Description:</strong> {{ $task->description }}</p>
-                        <p><strong>Status:</strong> {{ $task->status ?? 'No status available' }}</p>
-                        <p><strong>Due Date:</strong> {{ $task->due_date ?? 'No due date available' }}</p>
+                        <h5>Name: {{ $task->name }}</h5>
+                        <p>Description: {{ $task->description }}</p>
+                        <p>Status: {{ $task->status ?? 'No status available' }}</p>
+                        <p>Due Date: {{ $task->deadline ?? 'No due date available' }}</p>
+                        <a href="{{ route('projects.tasks.edit', [$project, $task]) }}" class="btn btn-warning">Edit</a>
+                        <a href="{{ route('projects.tasks.index', $project) }}" class="btn btn-secondary">Back to List</a>
                     </div>
                 </div>
             </div>

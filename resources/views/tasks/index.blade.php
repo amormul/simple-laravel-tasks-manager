@@ -27,8 +27,8 @@
                                     <tr>
                                         <td>{{ $task->name }}</td>
                                         <td>{{ $task->description }}</td>
-                                        <td>{{ $task->status }}</td>
-                                        <td>{{ $task->due_date }}</td>
+                                        <td>{{ $task->status ?? 'Not specified' }}</td>
+                                        <td>{{ $task->deadline ?? 'Not specified' }}</td>
                                         <td>
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <a href="{{ route('projects.tasks.edit', [$project, $task]) }}" class="btn btn-warning">Edit</a>
